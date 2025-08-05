@@ -7,3 +7,4 @@ export type Profile = {
   role: 'admin' | 'vendedor' | 'designer' | 'producao' | 'user';
   store_id?: string;
 };
+ 
