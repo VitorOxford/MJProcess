@@ -148,7 +148,9 @@ import { VDataTable } from 'vuetify/components/VDataTable';
 type Order = {
   id: string; customer_name: string; status: string; value: number; created_at: string; production_date: string | null; quantity_meters: number;
   details: { fabric_type: string; stamp_details: string; final_art_url?: string; };
-  profiles: { full_name: string; } | null; stores: { name: string; } | null;
+  // AQUI ESTÁ A MUDANÇA: 'profiles' agora pode ser um objeto ou nulo.
+  profiles: { full_name: string; } | null;
+  stores: { name: string; } | null;
 };
 
 const orders = ref<Order[]>([]);
