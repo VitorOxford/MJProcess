@@ -31,10 +31,10 @@
                     label="Atribuir para"
                     variant="outlined"
                 >
-                    <template v-slot:item="{ props, item }">
-                        <v-list-item v-bind="props" :prepend-avatar="item.raw.avatar_url" :title="item.raw.full_name"></v-list-item>
-                    </template>
-                </v-autocomplete>
+     <template v-slot:item="{ props, item }: { props: any, item: any }">
+        <v-list-item v-bind="props" :prepend-avatar="item.raw.avatar_url" :title="item.raw.full_name"></v-list-item>
+    </template>
+</v-autocomplete>
             </v-col>
             <v-col cols="12" sm="6">
                 <v-text-field
@@ -110,7 +110,8 @@ watch(() => props.show, (newVal) => {
       Object.assign(form, { ...props.taskData });
     } else {
       resetForm();
-      form.user_id = userStore.profile?.id; // Atribui a si mesmo por padrão
+      // AQUI a correção de tipo
+      form.user_id = userStore.profile?.id || null;
     }
   }
 });
