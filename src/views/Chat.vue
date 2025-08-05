@@ -1162,6 +1162,24 @@ watch([activeChannel, isMobile], ([channel, mobile]) => {
   }
 });
 
+  const openEditChannelDialog = () => {
+    // Lógica para editar o canal (pode ser implementada depois)
+    alert('Função "Editar Grupo" ainda não implementada.');
+};
+
+const openManageMembersDialog = () => {
+    // Lógica para gerenciar membros (pode ser implementada depois)
+    alert('Função "Gerenciar Membros" ainda não implementada.');
+};
+
+const handleDeleteChannel = async () => {
+    if (!activeChannel.value) return;
+    if (confirm(`Tem certeza que deseja excluir o canal "${activeChannel.value.name}"?`)) {
+        // Lógica para deletar o canal (pode ser implementada depois)
+        alert('Função "Excluir Grupo" ainda não implementada.');
+    }
+};
+  
 </script>
 
 <style lang="scss">
