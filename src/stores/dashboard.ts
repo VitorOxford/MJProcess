@@ -8,9 +8,15 @@ export type Order = {
   quantity_meters: number;
   value: number;
   created_at: string;
+  updated_at: string; // Adicione esta linha
   created_by: string;
-  customer_name: string; // Adicionado
-  stores: { // Adicionado para o nome da loja
+  customer_name: string;
+  details: { // Adicione este objeto
+    fabric_type: string;
+    stamp_details: string;
+    final_art_url?: string;
+  };
+  stores: {
     name: string;
   } | null;
 };
