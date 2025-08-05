@@ -176,7 +176,7 @@ const handleProjectSave = (project: Project) => {
 };
 
 const openTaskModal = (task: Task | null = null, columnId: string | null = null) => {
-  selectedTask.value = task ? { ...task, column_id: columnId || task.column_id } : { column_id: columnId };
+  selectedTask.value = task ? { ...task } : { column_id: columnId };
   showTaskModal.value = true;
 };
 const handleTaskSave = async () => {
