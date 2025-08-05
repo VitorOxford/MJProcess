@@ -5,7 +5,7 @@
     <v-container class="fill-height d-flex justify-center align-center pa-4">
       <v-card class="glassmorphism-card login-card" width="100%" max-width="400px">
         <div class="d-flex justify-center pa-6">
-            <v-img src="@/assets/logo.png" max-height="60" contain class="animated-logo"></v-img>
+            <v-img src="@/assets/logo.png" max-height="60" contain class="animated-logo" />
         </div>
 
         <v-card-title class="text-center text-h5 pb-4">
@@ -13,38 +13,34 @@
         </v-card-title>
         <v-card-text>
           <v-form @submit.prevent="handleLogin">
-            <v-card-text>
-  <v-form @submit.prevent="handleLogin">
-    <v-text-field
-      v-model="email"
-      label="Email"
-      type="email"
-      prepend-inner-icon="mdi-email-outline"
-      variant="outlined"
-      :rules="[v => !!v || 'O campo Email é obrigatório']"
-    ></v-text-field>
-
-    <v-text-field
-      v-model="password"
-      label="Senha"
-      type="password"
-      prepend-inner-icon="mdi-lock-outline"
-      variant="outlined"
-      class="mt-3"
-      :rules="[v => !!v || 'O campo Senha é obrigatório']"
-    ></v-text-field>
-    
-    <v-alert
-      v-if="errorMessage"
-      type="error"
-      class="mt-4"
-      dense
-      text
-    >
-      {{ errorMessage }}
-    </v-alert>
-  </v-form>
-</v-card-text>
+            <v-text-field
+              v-model="email"
+              label="Email"
+              type="email"
+              prepend-inner-icon="mdi-email-outline"
+              variant="outlined"
+              :rules="[v => !!v || 'O campo Email é obrigatório']"
+            ></v-text-field>
+            <v-text-field
+              v-model="password"
+              label="Senha"
+              type="password"
+              prepend-inner-icon="mdi-lock-outline"
+              variant="outlined"
+              class="mt-3"
+              :rules="[v => !!v || 'O campo Senha é obrigatório']"
+            ></v-text-field>
+            <v-alert
+              v-if="errorMessage"
+              type="error"
+              class="mt-4"
+              dense
+              text
+            >
+              {{ errorMessage }}
+            </v-alert>
+          </v-form>
+        </v-card-text>
         <v-card-actions class="pa-4">
           <v-btn
             :loading="loading"
