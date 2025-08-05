@@ -98,7 +98,7 @@ const selectedOrder = ref<Order | null>(null);
 const uploadModalTitle = ref('');
 const pendingMove = ref<{ order: Order; newStatus: DesignStatus } | null>(null);
 
-const columns = ref([
+const columns = ref<{ id: number; title: string; icon: string; color: string; statuses: DesignStatus[] }[]>([
   { id: 1, title: 'Fila de Espera', icon: 'mdi-clock-outline', color: 'blue-grey', statuses: ['design_pending'] },
   { id: 2, title: 'Em Desenvolvimento', icon: 'mdi-pencil-ruler', color: 'blue', statuses: ['in_design'] },
   { id: 3, title: 'Alteração Solicitada', icon: 'mdi-alert-circle-outline', color: 'red', statuses: ['changes_requested'] },
