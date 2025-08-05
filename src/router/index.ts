@@ -89,17 +89,17 @@ router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const requiredRoles = to.meta.roles as string[] | undefined;
 
-  if (requiresAuth && !userStore.isLoggedIn) {
-    return next({ name: 'Login' });
+if (requiresAuth && !userStore.isLoggedIn) {
+    return next({ path: '/login' }); // Mude aqui
   }
 
-  if (to.name === 'Login' && userStore.isLoggedIn) {
-    return next({ name: 'Home' });
+  if (to.path === '/login' && userStore.isLoggedIn) { // Compare com path
+    return next({ path: '/' }); // Mude aqui
   }
 
   if (requiredRoles && !requiredRoles.includes(userStore.profile?.role ?? '')) {
-     console.warn(`Acesso negado. Rota ${to.path} exige as roles: ${requiredRoles}. Usuário tem a role: ${userStore.profile?.role}`);
-     return next({ name: 'Home' });
+     console.warn(`Acesso negado...`);
+     return next({ path: '/' }); // Mude aqui
   }
 
   next();
