@@ -117,7 +117,7 @@
                     bordered
                   >
                   <v-avatar size="42">
-                    <v-img v-if="getDmUser(channel)?.avatar_url" :src="getDmUser(channel)?.avatar_url" cover></v-img>
+                    <v-img v-if="getDmUser(channel)?.avatar_url" :src="getDmUser(channel)?.avatar_url || ''" cover></v-img>
                     <v-icon v-else>mdi-account</v-icon>
                   </v-avatar>
                 </v-badge>
@@ -150,7 +150,7 @@
                 >
                   <template v-slot:prepend>
                     <v-avatar size="42">
-                      <v-img v-if="channel.icon_image_url" :src="channel.icon_image_url" cover></v-img>
+                      <v-img v-if="channel.icon_image_url" :src="channel.icon_image_url || ''" cover></v-img>
                       <v-icon v-else :icon="channel.icon"></v-icon>
                     </v-avatar>
                   </template>
@@ -203,7 +203,7 @@
              <div v-for="(group, index) in groupedMessages" :key="index" class="message-group" :class="{ 'my-message-group': isMyMessage(group.messages[0]) && !isAuditorMode }">
                 <div class="d-flex align-start" :class="{'flex-row-reverse': isMyMessage(group.messages[0]) && !isAuditorMode}">
                     <v-avatar size="40" class="message-avatar" v-if="!isMyMessage(group.messages[0]) || isAuditorMode">
-                        <v-img :src="group.profile?.avatar_url" :alt="group.profile?.full_name"></v-img>
+                        <v-img :src="group.profile?.avatar_url || ''" :alt="group.profile?.full_name"></v-img>
                     </v-avatar>
                     <div class="message-content-wrapper">
                          <div class="font-weight-bold message-sender-name" v-if="!isMyMessage(group.messages[0]) || isAuditorMode">
@@ -316,21 +316,21 @@
             </template>
             <v-list>
               <v-list-item
-                v-if="isAdmin || userProfile?.id === activeChannel?.created_by"
+                v-if="!isDirectMessageActive && (isAdmin || userProfile?.id === activeChannel?.created_by)"
                 @click="openEditChannelDialog"
               >
                 <v-list-item-title>Editar grupo</v-list-item-title>
                 <template v-slot:prepend><v-icon>mdi-pencil</v-icon></template>
               </v-list-item>
               <v-list-item
-                v-if="isAdmin || userProfile?.id === activeChannel?.created_by"
+                v-if="!isDirectMessageActive && (isAdmin || userProfile?.id === activeChannel?.created_by)"
                 @click="openManageMembersDialog"
               >
                 <v-list-item-title>Gerenciar membros</v-list-item-title>
                 <template v-slot:prepend><v-icon>mdi-account-multiple-plus</v-icon></template>
               </v-list-item>
               <v-list-item
-                v-if="isAdmin || userProfile?.id === activeChannel?.created_by"
+                v-if="!isDirectMessageActive && (isAdmin || userProfile?.id === activeChannel?.created_by)"
                 @click="handleDeleteChannel"
               >
                 <v-list-item-title>Excluir grupo</v-list-item-title>
@@ -375,7 +375,7 @@
                                 :color="isUserOnline(user.id || '') ? 'success' : 'grey'"
                                 bordered
                             >
-                                <v-avatar size="32"><v-img :src="user.avatar_url"></v-img></v-avatar>
+                                <v-avatar size="32"><v-img :src="user.avatar_url || ''"></v-img></v-avatar>
                             </v-badge>
                         </template>
                         <v-list-item-title>{{ user.full_name }}</v-list-item-title>
@@ -389,9 +389,9 @@
                     v-for="media in mediaImages"
                     :key="media.id"
                     class="media-item"
-                    @click="openImageModal(media.display_content, getFileNameFromPath(media.content), media.message_type)"
+                    @click="openImageModal(media.display_content || '', getFileNameFromPath(media.content), media.message_type)"
                   >
-                    <v-img :src="media.display_content" aspect-ratio="1" cover class="media-image"></v-img>
+                    <v-img :src="media.display_content || ''" aspect-ratio="1" cover class="media-image"></v-img>
                   </v-card>
                 </div>
                 <div v-else class="empty-list-notice">
@@ -404,7 +404,7 @@
                     v-for="media in mediaFiles"
                     :key="media.id"
                     class="media-item"
-                    @click="openImageModal(media.display_content, getFileNameFromPath(media.content), media.message_type)"
+                    @click="openImageModal(media.display_content || '', getFileNameFromPath(media.content), media.message_type)"
                   >
                     <div class="file-placeholder">
                       <v-icon size="x-large">mdi-file-outline</v-icon>
@@ -508,13 +508,13 @@
     <ImageModal :show="showImageModal" :image-url="modalImageUrl" :file-name="modalImageFileName" :file-type="modalImageFileType" @close="closeImageModal" />
 
     <v-btn
-v-if="isMobile && !leftDrawer && !activeChannel"
-  icon="mdi-forum-outline"
-  color="primary"
-  class="drawer-fab-bottom glassmorphism-base"
-  @click="leftDrawer = true"
-  style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 999;"
-></v-btn>
+      v-if="isMobile && !leftDrawer && !activeChannel"
+      icon="mdi-forum-outline"
+      color="primary"
+      class="drawer-fab-bottom glassmorphism-base"
+      @click="leftDrawer = true"
+      style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 999;"
+    ></v-btn>
 
   </div>
 </template>
@@ -523,7 +523,7 @@ v-if="isMobile && !leftDrawer && !activeChannel"
 import { ref, onMounted, onUnmounted, watch, computed, nextTick } from 'vue';
 import { useDisplay } from 'vuetify'; // Importa o hook de display
 import { supabase } from '@/api/supabase';
-import type { RealtimeChannel, User, RealtimePostgresChangesPayload } from '@supabase/supabase-js';
+import type { RealtimeChannel, User, RealtimePostgresChangesPayload, SupabaseClient } from '@supabase/supabase-js';
 import ImageModal from '@/components/ImageModal.vue';
 
 // =======================================================================
@@ -533,9 +533,9 @@ const { mobile } = useDisplay();
 const isMobile = computed(() => mobile.value);
 const leftDrawer = ref(!isMobile.value); // Inicia aberto no desktop, fechado no mobile
 
-// Observa mudanças no tamanho da tela para ajustar o drawer
-
-
+watch(isMobile, (newVal) => {
+  leftDrawer.value = !newVal;
+});
 
 // =======================================================================
 // ========================== TIPOS E INTERFACES =========================
@@ -587,7 +587,7 @@ const backgrounds = ref([
 ]);
 const userPersonalBackground = ref<string | null>(null);
 const currentBackground = ref(backgrounds.value[0]);
-let backgroundInterval: NodeJS.Timeout;
+let backgroundInterval: number;
 
 // --- Canais e Conversas ---
 const channels = ref<Channel[]>([]);
@@ -725,7 +725,7 @@ const fetchChannels = async () => {
             .eq('is_deleted', false);
 
         if (createdError) throw createdError;
-        createdChannels.forEach(channel => finalChannels.set(channel.id, channel));
+        (createdChannels || []).forEach(channel => finalChannels.set(channel.id, channel));
 
         const { data: memberEntries, error: memberError } = await supabase
             .from('channel_members')
@@ -734,7 +734,7 @@ const fetchChannels = async () => {
 
         if (memberError) throw memberError;
 
-        const memberChannelIds = memberEntries.map(m => m.channel_id);
+        const memberChannelIds = (memberEntries || []).map(m => m.channel_id);
         if (memberChannelIds.length > 0) {
             const { data: memberChannels, error: channelsError } = await supabase
                 .from('channels')
@@ -743,7 +743,7 @@ const fetchChannels = async () => {
                 .eq('is_deleted', false);
 
             if (channelsError) throw channelsError;
-            memberChannels.forEach(channel => finalChannels.set(channel.id, channel));
+            (memberChannels || []).forEach(channel => finalChannels.set(channel.id, channel));
         }
 
         channels.value = Array.from(finalChannels.values());
@@ -795,7 +795,7 @@ const fetchActiveChannelMembers = async (channelId: number) => {
             .eq('channel_id', channelId);
 
         if(error) throw error;
-        activeChannelMembers.value = data.map((item: any) => item.profiles) || [];
+        activeChannelMembers.value = (data || []).map((item: any) => item.profiles) || [];
     } catch(e: any) {
         console.error('Erro ao buscar membros do canal:', e);
         activeChannelMembers.value = [];
@@ -943,17 +943,19 @@ const handleCreateChannel = async () => {
         }).select().single();
         if (channelError) throw channelError;
 
-        const membersToInsert = newChannelMembers.value.map(userId => ({ channel_id: newChannel.id, profile_id: userId }));
-        membersToInsert.push({ channel_id: newChannel.id, profile_id: loggedInUser.value.id });
+        if (newChannel) {
+          const membersToInsert = newChannelMembers.value.map(userId => ({ channel_id: newChannel.id, profile_id: userId }));
+          membersToInsert.push({ channel_id: newChannel.id, profile_id: loggedInUser.value.id });
 
-        if (membersToInsert.length > 0) {
-            const { error: memberError } = await supabase.from('channel_members').insert(membersToInsert);
-            if (memberError) throw memberError;
+          if (membersToInsert.length > 0) {
+              const { error: memberError } = await supabase.from('channel_members').insert(membersToInsert);
+              if (memberError) throw memberError;
+          }
+
+          closeDialog('create');
+          await fetchChannels();
+          await selectChannel(newChannel);
         }
-
-        closeDialog('create');
-        await fetchChannels();
-        await selectChannel(newChannel);
     } catch (error: any) { console.error('Erro ao criar o canal:', error);
     } finally { isCreatingChannel.value = false; }
 };
@@ -966,7 +968,7 @@ const startBackgroundCarousel = () => {
         return;
     }
     currentBackground.value = backgrounds.value[0];
-    backgroundInterval = setInterval(() => {
+    backgroundInterval = window.setInterval(() => {
         const currentIndex = backgrounds.value.indexOf(currentBackground.value);
         const nextIndex = (currentIndex + 1) % backgrounds.value.length;
         currentBackground.value = backgrounds.value[nextIndex];
@@ -1079,9 +1081,23 @@ const handleSignOut = async () => {
     }
 };
 
+const openEditChannelDialog = () => {
+  alert('Função "Editar Grupo" ainda não implementada.');
+};
+const openManageMembersDialog = () => {
+  alert('Função "Gerenciar Membros" ainda não implementada.');
+};
+const handleDeleteChannel = async () => {
+  if (!activeChannel.value) return;
+  if (confirm(`Tem certeza que deseja excluir o canal "${activeChannel.value.name}"?`)) {
+    alert('Função "Excluir Grupo" ainda não implementada.');
+  }
+};
+
 // --- Listeners e Ciclo de Vida ---
 const setupListeners = () => {
-    presenceChannel.value = supabase.channel('online_users', { config: { presence: { key: loggedInUser.value?.id } } })
+    if (!loggedInUser.value?.id) return;
+    presenceChannel.value = supabase.channel('online_users', { config: { presence: { key: loggedInUser.value.id } } })
         .on('presence', { event: 'sync' }, () => {
             const presenceState = presenceChannel.value?.presenceState();
             if (presenceState) onlineUsers.value = Object.keys(presenceState);
@@ -1105,8 +1121,8 @@ const setupListeners = () => {
         .subscribe();
 }
 const removeListeners = () => {
-    if (messageListener.value) supabase.removeChannel(messageListener.value);
-    if (presenceChannel.value) supabase.removeChannel(presenceChannel.value);
+    if (messageListener.value) supabase.removeChannel(messageListener.value as any);
+    if (presenceChannel.value) supabase.removeChannel(presenceChannel.value as any);
 }
 
 onMounted(async () => {
@@ -1161,25 +1177,6 @@ watch([activeChannel, isMobile], ([channel, mobile]) => {
     leftDrawer.value = true;
   }
 });
-
-  const openEditChannelDialog = () => {
-    // Lógica para editar o canal (pode ser implementada depois)
-    alert('Função "Editar Grupo" ainda não implementada.');
-};
-
-const openManageMembersDialog = () => {
-    // Lógica para gerenciar membros (pode ser implementada depois)
-    alert('Função "Gerenciar Membros" ainda não implementada.');
-};
-
-const handleDeleteChannel = async () => {
-    if (!activeChannel.value) return;
-    if (confirm(`Tem certeza que deseja excluir o canal "${activeChannel.value.name}"?`)) {
-        // Lógica para deletar o canal (pode ser implementada depois)
-        alert('Função "Excluir Grupo" ainda não implementada.');
-    }
-};
-  
 </script>
 
 <style lang="scss">
@@ -1190,7 +1187,6 @@ html, body, #app {
   overflow: hidden;
 }
 
-/* As variáveis agora estão no container principal para garantir o escopo correto */
 .app-container {
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --bg-color-rgba: rgba(18, 18, 24, 0.6);
