@@ -141,6 +141,9 @@
 </template>
 
 <script setup lang="ts">
+// Em: src/layouts/default.vue
+// SUBSTITUA O SCRIPT INTEIRO POR ISTO:
+
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useDisplay } from 'vuetify';
 import { supabase } from '@/api/supabase';
@@ -185,15 +188,18 @@ const allNavItems = [
 
 const navItems = computed(() => {
     if (!profile.value) return [];
-    return allNavItems.filter(item => item.roles.includes(profile.value.role));
+    // AQUI a correção para o erro de 'role'
+    return allNavItems.filter(item => item.roles.includes(profile.value!.role));
 });
 
 const handleLogout = async () => {
   if (notificationListener.value) {
-    supabase.removeChannel(notificationListener.value);
+    // AQUI a correção para o Supabase
+    await supabase.removeChannel(notificationListener.value as any);
   }
   await userStore.signOut();
-  router.push({ path: '/login' }); // Use path aqui também
+  // AQUI a correção para o Router
+  router.push({ path: '/login' });
 };
 
 const backgrounds = ref([
@@ -204,13 +210,13 @@ const backgrounds = ref([
     'https://drprfuinwglmzquqtqzq.supabase.co/storage/v1/object/public/media/5.jpg'
 ]);
 const currentBackground = ref('');
-let backgroundInterval: NodeJS.Timeout;
+let backgroundInterval: number; // Correção de tipo aqui
 
 const startBackgroundCarousel = () => {
     clearInterval(backgroundInterval);
     if (backgrounds.value.length === 0) return;
     currentBackground.value = backgrounds.value[0];
-    backgroundInterval = setInterval(() => {
+    backgroundInterval = window.setInterval(() => {
         const currentIndex = backgrounds.value.indexOf(currentBackground.value);
         const nextIndex = (currentIndex + 1) % backgrounds.value.length;
         currentBackground.value = backgrounds.value[nextIndex];
@@ -270,6 +276,7 @@ const formatDate = (dateString: string) => {
 
 onMounted(async () => {
   if (userStore.isLoggedIn) {
+    await userStore.fetchSession(); // Garante que o profile está carregado
     await fetchNotifications();
     setupNotificationListener();
   }
@@ -279,7 +286,7 @@ onMounted(async () => {
 onUnmounted(() => {
   clearInterval(backgroundInterval);
   if (notificationListener.value) {
-      supabase.removeChannel(notificationListener.value);
+      supabase.removeChannel(notificationListener.value as any);
   }
 });
 </script>
