@@ -113,7 +113,7 @@
                     location="bottom end"
                     offset-x="8"
                     offset-y="8"
-                    :color="isUserOnline(getDmUser(channel)?.id) ? 'success' : 'grey'"
+                    :color="isUserOnline(getDmUser(channel)?.id || '') ? 'success' : 'grey'"
                     bordered
                   >
                   <v-avatar size="42">
@@ -123,7 +123,7 @@
                 </v-badge>
               </template>
               <v-list-item-title class="font-weight-bold">{{ getDmUser(channel)?.full_name || 'DM' }}</v-list-item-title>
-              <v-list-item-subtitle class="text-truncate">{{ isUserOnline(getDmUser(channel)?.id) ? 'Online' : 'Offline' }}</v-list-item-subtitle>
+              <v-list-item-subtitle class="text-truncate">{{ isUserOnline(getDmUser(channel)?.id || '') ? 'Online' : 'Offline' }}</v-list-item-subtitle>
               <template v-slot:append>
                   <v-badge
                     v-if="unreadMessageCounts.get(channel.id) > 0"
@@ -372,7 +372,7 @@
                                 location="bottom end"
                                 offset-x="8"
                                 offset-y="8"
-                                :color="isUserOnline(user.id) ? 'success' : 'grey'"
+                                :color="isUserOnline(user.id || '') ? 'success' : 'grey'"
                                 bordered
                             >
                                 <v-avatar size="32"><v-img :src="user.avatar_url"></v-img></v-avatar>
