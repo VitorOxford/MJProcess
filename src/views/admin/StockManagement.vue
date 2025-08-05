@@ -94,11 +94,12 @@ const editedItem = ref<{
     quantity: null,
 });
 
+// CORREÇÃO: Adicionado 'as const' para que o TypeScript infira os tipos literais corretos
 const headers = [
   { title: 'Tipo de Tecido', key: 'fabric_type', sortable: true },
   { title: 'Metragem Disponível', key: 'available_meters', sortable: true },
   { title: 'Ações', key: 'actions', sortable: false, align: 'end' },
-];
+] as const;
 
 const dialogTitle = computed(() => isEditing.value ? `Atualizar Estoque: ${editedItem.value.fabric_type}` : 'Adicionar Novo Tecido');
 
@@ -121,7 +122,6 @@ const openNewItemDialog = () => {
   dialog.value = true;
 };
 
-// FUNÇÃO ATUALIZADA para receber 'item' diretamente
 const openEditDialog = (item: StockItem) => {
   isEditing.value = true;
   editedItem.value = { id: item.id, fabric_type: item.fabric_type, quantity: null, current_stock: item.available_meters };
@@ -146,7 +146,7 @@ const saveStock = async () => {
   isSaving.value = true;
 
   try {
-      if (isEditing.value) {
+      if (isEditing.value && editedItem.value.id) { // Adicionado check para id
           const { error } = await supabase.rpc('increment', {
               table_name: 'stock',
               row_id: editedItem.value.id,
