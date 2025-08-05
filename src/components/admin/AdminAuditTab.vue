@@ -5,7 +5,7 @@
       <v-tab value="chat" class="sub-tab-item">Auditoria de Chat</v-tab>
     </v-tabs>
 
-    <v-window v-model="auditTab" class="mt-4">
+    <v-window v-model="auditTab" class="mt-4"> 
       <v-window-item value="orders">
         <v-data-table
           :headers="headers"
