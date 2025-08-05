@@ -135,6 +135,7 @@ const fetchOrderDetails = async () => {
     const { data, error: fetchError } = await supabase.from('orders').select('*').eq('id', orderId).single();
     if (fetchError || !data) throw new Error('Pedido não encontrado.');
     if(data.status !== 'customer_approval') {
+        // CORREÇÃO: Usando o nome de rota correto
         router.push({ name: 'Home' });
         return;
     }
@@ -149,7 +150,6 @@ const approveOrder = async () => {
     if (!order.value || !userStore.profile) return;
     isSubmitting.value = true;
     try {
-        // Chama a nova RPC que contém toda a lógica de aprovação
         const { error: rpcError } = await supabase.rpc('approve_order_and_schedule', {
             p_order_id: order.value.id
         });
@@ -168,6 +168,7 @@ const approveOrder = async () => {
             redirect_url: '/pedidos'
         });
 
+        // CORREÇÃO: Usando o nome de rota correto
         router.push({ name: 'Orders' });
 
     } catch(e: any) {
@@ -179,6 +180,7 @@ const approveOrder = async () => {
 
 const handleChangesSubmitted = () => {
     showRequestChangesModal.value = false;
+    // CORREÇÃO: Usando o nome de rota correto
     router.push({ name: 'Home' });
 };
 
