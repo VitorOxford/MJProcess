@@ -134,11 +134,10 @@ const fetchOrderDetails = async () => {
   try {
     const { data, error: fetchError } = await supabase.from('orders').select('*').eq('id', orderId).single();
     if (fetchError || !data) throw new Error('Pedido não encontrado.');
-    if(data.status !== 'customer_approval') {
-        // CORREÇÃO: Usando o nome de rota correto
-        router.push({ name: 'Home' });
-        return;
-    }
+if(data.status !== 'customer_approval') {
+    router.push({ path: '/' }); // Mude aqui
+    return;
+}
     order.value = data;
   } catch (e: any) { error.value = e.message; }
   finally { loading.value = false; }
@@ -169,7 +168,7 @@ const approveOrder = async () => {
         });
 
         // CORREÇÃO: Usando o nome de rota correto
-        router.push({ name: 'Orders' });
+        router.push({ path: '/pedidos' });
 
     } catch(e: any) {
         alert(`Erro ao aprovar o pedido: ${e.message}`);
@@ -181,7 +180,7 @@ const approveOrder = async () => {
 const handleChangesSubmitted = () => {
     showRequestChangesModal.value = false;
     // CORREÇÃO: Usando o nome de rota correto
-    router.push({ name: 'Home' });
+    router.push({ path: '/' });
 };
 
 onMounted(() => {
