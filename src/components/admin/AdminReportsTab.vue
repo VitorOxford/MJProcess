@@ -129,11 +129,12 @@ const generateReport = async () => {
     });
     if (error) throw error;
 
-    const kpis = [
-        { label: 'Ações em Pedidos', value: activities.filter(a => a.action_type !== 'CHAT_MESSAGE').length },
-        { label: 'Mensagens Enviadas', value: activities.filter(a => a.action_type === 'CHAT_MESSAGE').length },
-        { label: 'Total de Atividades', value: activities.length },
-    ];
+const kpis = [
+    // Diga ao TypeScript que 'a' é do tipo 'Activity'
+    { label: 'Ações em Pedidos', value: activities.filter((a: Activity) => a.action_type !== 'CHAT_MESSAGE').length },
+    { label: 'Mensagens Enviadas', value: activities.filter((a: Activity) => a.action_type === 'CHAT_MESSAGE').length },
+    { label: 'Total de Atividades', value: activities.length },
+];
 
     reportData.value = { kpis, activity: activities };
 
