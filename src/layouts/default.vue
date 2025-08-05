@@ -7,11 +7,11 @@
 
     <v-app-bar v-if="isMobile" app color="rgba(20, 20, 25, 0.7)" density="compact" class="glassmorphism-app-bar">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title class="app-bar-title">
-         <router-link :to="{ path: '/' }">
-            <v-img src="@/assets/logo.png" max-height="30" contain></v-img>
-         </router-link>
-      </v-toolbar-title>
+<v-toolbar-title class="app-bar-title">
+    <router-link :to="{ path: '/' }">
+        <v-img src="@/assets/logo.png" max-height="30" contain></v-img>
+    </router-link>
+</v-toolbar-title>
     </v-app-bar>
 
     <v-navigation-drawer
