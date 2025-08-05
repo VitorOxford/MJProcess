@@ -8,7 +8,7 @@
     <v-app-bar v-if="isMobile" app color="rgba(20, 20, 25, 0.7)" density="compact" class="glassmorphism-app-bar">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title class="app-bar-title">
-         <router-link :to="{ name: 'Home' }">
+         <router-link :to="{ path: '/' }">
             <v-img src="@/assets/logo.png" max-height="30" contain></v-img>
          </router-link>
       </v-toolbar-title>
@@ -99,7 +99,7 @@
             <template v-slot:prepend>
               <v-avatar :image="profile.avatar_url || ''" size="40"></v-avatar>
             </template>
-            <v-list-item-title class="font-weight-bold text-body-1">{{ profile.full_name || 'Usuário' }}</v-list-item-title>
+           <v-list-item-title class="font-weight-bold text-body-1">{{ profile?.full_name || 'Usuário' }}</v-list-item-title>
             <v-list-item-subtitle class="text-caption">{{ userStore.user?.email || '...' }}</v-list-item-subtitle>
           </v-list-item>
           <v-btn
@@ -193,7 +193,7 @@ const handleLogout = async () => {
     supabase.removeChannel(notificationListener.value);
   }
   await userStore.signOut();
-  router.push({ name: 'Login' });
+  router.push({ path: '/login' }); // Use path aqui também
 };
 
 const backgrounds = ref([
