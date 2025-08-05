@@ -190,14 +190,16 @@ const weekDays = computed(() => {
 const fetchAllOrders = async () => {
   loading.value = true;
   try {
-    const { data, error } = await supabase
-        .from('orders')
-        .select(`id, customer_name, status, value, created_at, production_date, quantity_meters, details, profiles:created_by (full_name), stores (name)`)
-        .in('status', ['pending_stock', 'scheduling_pending', 'production_queue', 'in_printing'])
-        .order('created_at', { ascending: true });
+const { data, error } = await supabase
+    .from('orders')
+    // Ajuste o select para pegar apenas o que precisa e evitar ambiguidades
+    .select(`id, customer_name, status, value, created_at, production_date, quantity_meters, details, profiles:created_by (full_name), stores (name)`)
+    .in('status', ['pending_stock', 'scheduling_pending', 'production_queue', 'in_printing'])
+    .order('created_at', { ascending: true });
 
-    if (error) throw error;
-    orders.value = data || [];
+if (error) throw error;
+// Faça um cast para 'any' e depois para 'Order[]' para forçar o TypeScript a aceitar
+orders.value = (data as any) as Order[];
   } catch (err: any) {
     console.error('Erro ao buscar pedidos:', err);
   } finally {
