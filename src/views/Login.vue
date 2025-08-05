@@ -13,34 +13,38 @@
         </v-card-title>
         <v-card-text>
           <v-form @submit.prevent="handleLogin">
-            <v-text-field
-              v-model="email"
-              label="Email"
-              type="email"
-              prepend-inner-icon="mdi-email-outline"
-              required
-              variant="outlined"
-            ></v-text-field>
-            <v-text-field
-              v-model="password"
-              label="Senha"
-              type="password"
-              prepend-inner-icon="mdi-lock-outline"
-              required
-              variant="outlined"
-              class="mt-3"
-            ></v-text-field>
-            <v-alert
-              v-if="errorMessage"
-              type="error"
-              class="mt-4"
-              dense
-              text
-            >
-              {{ errorMessage }}
-            </v-alert>
-          </v-form>
-        </v-card-text>
+            <v-card-text>
+  <v-form @submit.prevent="handleLogin">
+    <v-text-field
+      v-model="email"
+      label="Email"
+      type="email"
+      prepend-inner-icon="mdi-email-outline"
+      variant="outlined"
+      :rules="[v => !!v || 'O campo Email é obrigatório']"
+    ></v-text-field>
+
+    <v-text-field
+      v-model="password"
+      label="Senha"
+      type="password"
+      prepend-inner-icon="mdi-lock-outline"
+      variant="outlined"
+      class="mt-3"
+      :rules="[v => !!v || 'O campo Senha é obrigatório']"
+    ></v-text-field>
+    
+    <v-alert
+      v-if="errorMessage"
+      type="error"
+      class="mt-4"
+      dense
+      text
+    >
+      {{ errorMessage }}
+    </v-alert>
+  </v-form>
+</v-card-text>
         <v-card-actions class="pa-4">
           <v-btn
             :loading="loading"
