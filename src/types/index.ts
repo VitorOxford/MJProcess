@@ -4,5 +4,6 @@ export type Profile = {
   username: string;
   full_name: string;
   avatar_url: string;
-  role: 'admin' | 'vendedor' | 'designer' | 'producao' | 'user'; // Adicione outras roles se necessário
+  role: 'admin' | 'vendedor' | 'designer' | 'producao' | 'user';
+  store_id?: string;
 };
