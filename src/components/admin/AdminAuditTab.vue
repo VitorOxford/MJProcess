@@ -110,12 +110,12 @@ const search = ref('');
 const showHistoryModal = ref(false);
 const historyLoading = ref(false);
 const orderHistory = ref<OrderLog[]>([]);
-const headers = [
+const headers: any[] = [
   { title: 'Cliente', key: 'customer_name' },
   { title: 'Status', key: 'status' },
   { title: 'Valor', key: 'value' },
   { title: 'Data Criação', key: 'created_at' },
-  { title: 'Ações', key: 'actions', sortable: false, align: 'end' },
+  { title: 'Ações', key: 'actions', sortable: false, align: 'end' as const },
 ];
 
 const statusDisplayMap: Record<string, string> = {
