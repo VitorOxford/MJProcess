@@ -56,7 +56,7 @@
       </v-card>
     </v-container>
   </div>
-</template>
+</template> 
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
