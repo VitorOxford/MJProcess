@@ -189,11 +189,13 @@ const stepperItems = [
     { title: 'Revisão', icon: 'mdi-check-circle-outline' },
 ];
 
+// --- REGRAS DE VALIDAÇÃO ---
 const rules = {
   required: (v: any) => !!v || 'Campo obrigatório.',
   positive: (v: number) => (v !== null && v > 0) || 'O valor deve ser maior que zero.',
 };
 
+// --- PROPRIEDADES COMPUTADAS ---
 const selectedStockItem = computed(() => {
   if (!order.fabric_type) return null;
   return stockItems.value.find(item => item.fabric_type === order.fabric_type) || null;
@@ -216,16 +218,22 @@ const isFormValid = computed(() => {
 
 const stockUsageColor = computed(() => {
     if (!selectedStockItem.value || !order.quantity_meters) return 'primary';
+    // CORREÇÃO: Adicionado '?? 0' para tratar o caso de nulo
     const available = selectedStockItem.value.available_meters;
-    if (order.quantity_meters > available) return 'error';
-    if (order.quantity_meters > available * 0.8) return 'warning';
+    if ((order.quantity_meters ?? 0) > available) return 'error';
+    if ((order.quantity_meters ?? 0) > available * 0.8) return 'warning';
     return 'primary';
 });
 
+
+// --- FUNÇÕES ---
 const fetchStock = async () => {
   loadingStock.value = true;
   try {
-    const { data, error } = await supabase.from('stock').select('*').order('fabric_type', { ascending: true });
+    const { data, error } = await supabase
+      .from('stock')
+      .select('*')
+      .order('fabric_type', { ascending: true });
     if (error) throw error;
     stockItems.value = data || [];
   } catch (error) {
@@ -245,7 +253,6 @@ const submitOrder = async () => {
   if (!isFormValid.value || !userStore.profile) return;
   isSubmitting.value = true;
 
-  // Parâmetros para a RPC simplificada
   const params = {
     p_customer_name: order.customer_name,
     p_quantity_meters: order.quantity_meters,
@@ -253,14 +260,14 @@ const submitOrder = async () => {
       stamp_details: order.stamp_details,
       fabric_type: order.fabric_type,
     },
+    // CORREÇÃO: A propriedade store_id foi adicionada ao tipo Profile
     p_store_id: userStore.profile.store_id,
     p_created_by: userStore.profile.id,
     p_value: order.value,
   };
 
   try {
-    // Chamando a nova versão da RPC sem p_initial_status
-    const { error } = await supabase.rpc('create_order_and_update_stock', params);
+    const { error } = await supabase.rpc('create_order_and_update_stock', params as any);
     if (error) throw error;
 
     showFeedback('Pedido enviado para o design com sucesso!', 'success');
