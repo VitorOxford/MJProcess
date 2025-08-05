@@ -18,10 +18,10 @@
         <v-divider></v-divider>
 
         <v-card-actions class="pa-2">
-            <v-chip v-if="task.due_date" :color="dueDateChip.color" size="small" variant="tonal">
-                <v-icon start size="small">{{ dueDateChip.icon }}</v-icon>
-                {{ dueDateChip.text }}
-            </v-chip>
+<v-chip v-if="task.due_date" :color="dueDateChip?.color" size="small" variant="tonal">
+    <v-icon start size="small">{{ dueDateChip?.icon }}</v-icon>
+    {{ dueDateChip?.text }}
+</v-chip>
             <v-spacer></v-spacer>
             <v-avatar size="24" v-if="task.profiles">
                  <v-tooltip activator="parent" location="top">
