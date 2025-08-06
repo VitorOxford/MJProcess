@@ -95,33 +95,33 @@ const form = reactive({
   id: null,
   title: '',
   description: '',
-  user_id: null,
+  user_id: null as string | null, // Permite string ou null
   due_date: null,
   priority: 'Média',
-  status: 'Pendente',
   is_completed: false,
-});
-
-const isEditing = computed(() => !!form.id);
-
-watch(() => props.show, (newVal) => {
-  if (newVal) {
-    if (props.taskData) {
-      Object.assign(form, { ...props.taskData });
-    } else {
-      resetForm();
-      // AQUI a correção de tipo
-      form.user_id = userStore.profile?.id || null;
-    }
-  }
+  column_id: null as string | null, // Adicione esta linha
 });
 
 const resetForm = () => {
     Object.assign(form, {
         id: null, title: '', description: '', user_id: null, due_date: null,
-        priority: 'Média', status: 'Pendente', is_completed: false
+        priority: 'Média', is_completed: false, column_id: null // Adicione esta
     });
 }
+
+const isEditing = computed(() => !!form.id);
+
+watch(() => props.show, (newVal) => {
+  if (newVal) {
+    if (props.taskData && props.taskData.id) { // Verifica se está editando
+      Object.assign(form, { ...props.taskData });
+    } else {
+      resetForm();
+      form.column_id = props.taskData?.column_id || null; // Pega o column_id
+      form.user_id = userStore.profile?.id || null; // Atribui a si mesmo por padrão
+    }
+  }
+});
 
 const saveTask = async () => {
   if (!form.title || !form.user_id) return;
