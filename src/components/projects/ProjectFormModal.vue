@@ -37,6 +37,7 @@ watch(() => props.projectData, (newVal) => {
 });
 
 const saveProject = async () => {
+  if (!userStore.profile) return;
     isSaving.value = true;
     const payload = {
         name: form.name,
