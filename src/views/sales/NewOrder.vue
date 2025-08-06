@@ -3,7 +3,7 @@
     <v-card class="glassmorphism-card-order mx-auto" max-width="900">
       <v-toolbar color="transparent">
         <v-toolbar-title class="font-weight-bold">
-          <v-icon start>mdi-plus-box-outline</v-icon>
+          <v-icon start>mdi-plus-box-outline</v-icon> 
           Lançar Novo Pedido de Produção
         </v-toolbar-title>
       </v-toolbar>
