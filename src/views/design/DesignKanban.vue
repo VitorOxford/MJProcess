@@ -66,8 +66,7 @@
 </template>
 
 <script setup lang="ts">
-// SEU SCRIPT ATUAL SEM ALTERAÇÕES
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { supabase } from '@/api/supabase';
 import draggable from 'vuedraggable';
 import OrderDetailModal from '@/components/OrderDetailModal.vue';
@@ -97,8 +96,6 @@ const showUploadModal = ref(false);
 const selectedOrder = ref<Order | null>(null);
 const uploadModalTitle = ref('');
 const pendingMove = ref<{ order: Order; newStatus: DesignStatus } | null>(null);
-
-type DesignStatus = 'design_pending' | 'in_design' | 'changes_requested' | 'finalizing' | 'customer_approval';
 
 const columns = ref<Array<{ id: number; title: string; icon: string; color: string; statuses: DesignStatus[]; requiresUpload?: boolean }>>([
   { id: 1, title: 'Fila de Espera', icon: 'mdi-clock-outline', color: 'blue-grey', statuses: ['design_pending'] },
