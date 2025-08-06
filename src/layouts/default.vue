@@ -141,9 +141,6 @@
 </template>
 
 <script setup lang="ts">
-// Em: src/layouts/default.vue
-// SUBSTITUA O SCRIPT INTEIRO POR ISTO:
-
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useDisplay } from 'vuetify';
 import { supabase } from '@/api/supabase';
@@ -186,18 +183,16 @@ const allNavItems = [
 ];
 
 const navItems = computed(() => {
+    // CORREÇÃO APLICADA AQUI
     if (!profile.value) return [];
-    // AQUI a correção para o erro de 'role'
     return allNavItems.filter(item => item.roles.includes(profile.value!.role));
 });
 
 const handleLogout = async () => {
   if (notificationListener.value) {
-    // AQUI a correção para o Supabase
     await supabase.removeChannel(notificationListener.value as any);
   }
   await userStore.signOut();
-  // AQUI a correção para o Router
   router.push({ path: '/login' });
 };
 
@@ -209,7 +204,7 @@ const backgrounds = ref([
     'https://drprfuinwglmzquqtqzq.supabase.co/storage/v1/object/public/media/5.jpg'
 ]);
 const currentBackground = ref('');
-let backgroundInterval: number; // Correção de tipo aqui
+let backgroundInterval: number;
 
 const startBackgroundCarousel = () => {
     clearInterval(backgroundInterval);
@@ -275,7 +270,7 @@ const formatDate = (dateString: string) => {
 
 onMounted(async () => {
   if (userStore.isLoggedIn) {
-    await userStore.fetchSession(); // Garante que o profile está carregado
+    await userStore.fetchSession();
     await fetchNotifications();
     setupNotificationListener();
   }
