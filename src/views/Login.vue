@@ -35,8 +35,7 @@
               type="error"
               class="mt-4"
               dense
-              text
-            >
+              variant="tonal" >
               {{ errorMessage }}
             </v-alert>
           </v-form>
