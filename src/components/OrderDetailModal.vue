@@ -81,7 +81,10 @@ import { ptBR } from 'date-fns/locale';
 // ---- PROPS E EMITS (sem alteração) ----
 const props = defineProps({
   show: Boolean,
-  orderId: String,
+  orderId: {
+    type: String as () => string | null, // Permite que a prop seja string ou null
+    default: null
+  },
 });
 const emit = defineEmits(['close']);
 
