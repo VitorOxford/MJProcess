@@ -142,10 +142,10 @@ const onColumnDragEnd = async () => {
 const onTaskDragEnd = async (event: any, newColumnId: string) => {
     const { item, newIndex } = event;
     const taskId = item.dataset.id;
-    // Update task's column and position
-    await supabase.from('tasks').update({ column_id: newColumnId, position: newIndex }).eq('id', taskId);
-    // Refresh the board to reflect order changes
-    if (activeProject.value) await selectProject(activeProject.value);
+    if (taskId) { // Adiciona verificação
+      await supabase.from('tasks').update({ column_id: newColumnId, position: newIndex }).eq('id', taskId);
+      if (activeProject.value) await selectProject(activeProject.value);
+    }
 };
 
 const addColumn = async () => {
