@@ -82,7 +82,7 @@
                         <span>{{ selectedStockItem.available_meters }}m</span>
                     </div>
                    <v-progress-linear
-                        :model-value="(order.quantity_meters / selectedStockItem.available_meters) * 100"
+                        :model-value="((order.quantity_meters || 0) / (selectedStockItem.available_meters || 1)) * 100"
                         :color="stockUsageColor"
                         height="6"
                         rounded
