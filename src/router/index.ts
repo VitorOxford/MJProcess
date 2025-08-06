@@ -48,17 +48,6 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Chat',
         component: () => import('@/views/Chat.vue'),
       },
-      // --- FIM DA ALTERAÇÃO ---
-      {
-        path: 'tasks',
-        name: 'Tasks',
-        component: () => import('@/views/Tasks.vue'),
-      },
-      {
-        path: 'projects',
-        name: 'Projects',
-        component: () => import('@/views/Projects.vue'),
-      },
       {
         path: 'admin',
         name: 'Admin',
