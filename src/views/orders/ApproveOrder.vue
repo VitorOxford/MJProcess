@@ -186,7 +186,7 @@ const approveOrder = async () => {
 };
 
 const handleChangesSubmitted = () => {
-    showRequestChangesModal.value = false;
+    showRequestChangesModal.value = false; 
     // CORREÇÃO FINAL: Usando path para evitar erros de tipo do router
     router.push({ path: '/' });
 };
