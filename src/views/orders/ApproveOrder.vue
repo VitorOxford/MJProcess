@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div v-if="loading" class="text-center py-16"> 
+    <div v-if="loading" class="text-center py-16">
       <v-progress-circular indeterminate color="primary" size="64"></v-progress-circular>
       <p class="mt-4">Carregando dados do pedido...</p>
     </div>
@@ -9,7 +9,7 @@
       {{ error }}
     </v-alert>
 
-    <v-card v-else-if="order" class="glassmorphism-card-approve mx-auto" max-width="800">
+    <v-card v-if="order" class="glassmorphism-card-approve mx-auto" max-width="800">
       <v-toolbar color="transparent">
         <v-toolbar-title class="font-weight-bold">
           <v-icon start>mdi-check-decagram-outline</v-icon>
@@ -133,17 +133,25 @@ const fetchOrderDetails = async () => {
   error.value = null;
   try {
     const { data, error: fetchError } = await supabase.from('orders').select('*').eq('id', orderId).single();
-    if (fetchError || !data) throw new Error('Pedido não encontrado.');
-if(data.status !== 'customer_approval') {
-    router.push({ path: '/' }); // Mude aqui
-    return;
-}
+    if (fetchError || !data) throw new Error('Pedido não encontrado ou você não tem permissão para vê-lo.');
+    
+    if(data.status !== 'customer_approval') {
+        // Redireciona se o pedido não estiver mais neste status
+        router.push({ path: '/' });
+        return;
+    }
     order.value = data;
-  } catch (e: any) { error.value = e.message; }
-  finally { loading.value = false; }
+  } catch (e: any) { 
+    error.value = e.message; 
+  } finally { 
+    loading.value = false; 
+  }
 };
 
-const isImage = (url: string) => /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(url);
+const isImage = (url: string) => {
+    if (!url) return false;
+    return /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(url);
+}
 
 const approveOrder = async () => {
     if (!order.value || !userStore.profile) return;
@@ -166,8 +174,8 @@ const approveOrder = async () => {
             content: `Pedido de "${order.value.customer_name}" foi APROVADO e encaminhado.`,
             redirect_url: '/pedidos'
         });
-
-        // CORREÇÃO: Usando o nome de rota correto
+        
+        // CORREÇÃO FINAL: Usando path para evitar erros de tipo do router
         router.push({ path: '/pedidos' });
 
     } catch(e: any) {
@@ -179,7 +187,7 @@ const approveOrder = async () => {
 
 const handleChangesSubmitted = () => {
     showRequestChangesModal.value = false;
-    // CORREÇÃO: Usando o nome de rota correto
+    // CORREÇÃO FINAL: Usando path para evitar erros de tipo do router
     router.push({ path: '/' });
 };
 
