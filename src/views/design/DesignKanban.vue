@@ -34,7 +34,7 @@
                      <v-card-text>
                        <div class="d-flex justify-space-between align-center">
                           <p class="font-weight-bold text-body-1">{{ order.customer_name }}</p>
-                          <v-chip size="x-small" :color="getStatusColor(order.status)" variant="flat">{{ statusDisplayMap[order.status] }}</v-chip>
+                         <v-chip size="x-small" :color="getStatusColor(order.status)" variant="flat">{{ statusDisplayMap[order.status as DesignStatus] }}</v-chip>
                        </div>
                        <p class="text-caption text-grey-lighten-1 mt-1">
                           {{ order.details.fabric_type }} - {{ order.quantity_meters }}m
@@ -98,7 +98,7 @@ const selectedOrder = ref<Order | null>(null);
 const uploadModalTitle = ref('');
 const pendingMove = ref<{ order: Order; newStatus: DesignStatus } | null>(null);
 
-const columns = ref<{ id: number; title: string; icon: string; color: string; statuses: DesignStatus[] }[]>([
+const columns = ref<Array<{ id: number; title: string; icon: string; color: string; statuses: DesignStatus[]; requiresUpload?: boolean }>>([
   { id: 1, title: 'Fila de Espera', icon: 'mdi-clock-outline', color: 'blue-grey', statuses: ['design_pending'] },
   { id: 2, title: 'Em Desenvolvimento', icon: 'mdi-pencil-ruler', color: 'blue', statuses: ['in_design'] },
   { id: 3, title: 'Alteração Solicitada', icon: 'mdi-alert-circle-outline', color: 'red', statuses: ['changes_requested'] },
