@@ -23,7 +23,13 @@ import { ref, watch, reactive, computed } from 'vue';
 import { supabase } from '@/api/supabase';
 import { useUserStore } from '@/stores/user';
 
-const props = defineProps({ show: Boolean, projectData: Object });
+const props = defineProps({
+  show: Boolean,
+  projectData: {
+    type: Object as () => any | null, // Permite que a prop seja um objeto ou nulo
+    default: null
+  }
+});
 const emit = defineEmits(['close', 'save']);
 const userStore = useUserStore();
 
