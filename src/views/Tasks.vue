@@ -176,14 +176,11 @@ const handleProjectSave = (project: Project) => {
 };
 
 const openTaskModal = (task: Task | null = null, columnId: string | null = null) => {
-  if (task) {
-    selectedTask.value = { ...task, column_id: columnId || task.column_id };
-  } else {
-    // Passa um objeto com as propriedades mínimas, e não um objeto quebrado
-    selectedTask.value = { id: null, title: '', column_id: columnId };
-  }
+  // Se a tarefa existe, passa ela. Senão, cria um objeto VAZIO com o column_id.
+  selectedTask.value = task ? { ...task } : { column_id: columnId };
   showTaskModal.value = true;
 };
+  
 const handleTaskSave = async () => {
     if (activeProject.value) {
         await selectProject(activeProject.value);
