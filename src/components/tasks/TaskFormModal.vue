@@ -77,13 +77,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, defineProps, defineEmits, reactive } from 'vue';
+import { ref, watch, defineProps, defineEmits, reactive, computed } from 'vue';
 import { supabase } from '@/api/supabase';
 import { useUserStore } from '@/stores/user';
 
 const props = defineProps({
   show: Boolean,
-  taskData: Object,
+  taskData: Object as () => any | null,
   users: Array,
 });
 const emit = defineEmits(['close', 'save']);
@@ -91,40 +91,44 @@ const emit = defineEmits(['close', 'save']);
 const userStore = useUserStore();
 const isSaving = ref(false);
 const notifyUser = ref(true);
+
 const form = reactive({
-  id: null,
+  id: null as string | null,
   title: '',
   description: '',
-  user_id: null as string | null, // Permite string ou null
-  due_date: null,
+  user_id: null as string | null,
+  due_date: null as string | null,
   priority: 'Média',
+  status: 'Pendente',
   is_completed: false,
-  column_id: null as string | null, // Adicione esta linha
+  column_id: null as string | null,
 });
-
-const resetForm = () => {
-    Object.assign(form, {
-        id: null, title: '', description: '', user_id: null, due_date: null,
-        priority: 'Média', is_completed: false, column_id: null // Adicione esta
-    });
-}
 
 const isEditing = computed(() => !!form.id);
 
 watch(() => props.show, (newVal) => {
   if (newVal) {
-    if (props.taskData && props.taskData.id) { // Verifica se está editando
-      Object.assign(form, { ...props.taskData });
+    // Se tem ID, é edição. Senão, é tarefa nova.
+    if (props.taskData && props.taskData.id) {
+      Object.assign(form, props.taskData);
     } else {
       resetForm();
-      form.column_id = props.taskData?.column_id || null; // Pega o column_id
-      form.user_id = userStore.profile?.id || null; // Atribui a si mesmo por padrão
+      form.column_id = props.taskData?.column_id || null;
+      form.user_id = userStore.profile?.id || null;
     }
   }
 });
 
+const resetForm = () => {
+    Object.assign(form, {
+        id: null, title: '', description: '', user_id: null, due_date: null,
+        priority: 'Média', status: 'Pendente', is_completed: false, column_id: null
+    });
+}
+
 const saveTask = async () => {
-  if (!form.title || !form.user_id) return;
+  if (!form.title || !form.column_id) return; // Precisa de um título e uma coluna
+  if (!userStore.profile) return; // Precisa do usuário logado
   isSaving.value = true;
 
   try {
@@ -136,7 +140,8 @@ const saveTask = async () => {
       priority: form.priority,
       status: form.status,
       is_completed: form.is_completed,
-      created_by: form.id ? undefined : userStore.profile?.id, // Só insere created_by em tarefas novas
+      column_id: form.column_id,
+      created_by: form.id ? undefined : userStore.profile.id,
     };
 
     let savedData;
@@ -150,10 +155,10 @@ const saveTask = async () => {
       savedData = data;
     }
 
-    if (notifyUser.value && userStore.profile?.id !== form.user_id) {
+    if (notifyUser.value && userStore.profile.id !== form.user_id) {
       await supabase.from('notifications').insert({
         recipient_id: form.user_id,
-        sender_id: userStore.profile?.id,
+        sender_id: userStore.profile.id,
         content: `Nova tarefa atribuída a você: "${form.title}"`,
         redirect_url: '/tasks',
       });
