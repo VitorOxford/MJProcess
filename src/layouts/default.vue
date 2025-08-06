@@ -183,7 +183,6 @@ const allNavItems = [
   { icon: 'mdi-plus-box-outline', title: 'Novo Pedido', value: 'new-order', to: { name: 'NewOrder' }, roles: ['vendedor', 'admin'] },
   { icon: 'mdi-palette-swatch-outline', title: 'Fila de Design', value: 'design-kanban', to: { name: 'DesignKanban' }, roles: ['designer', 'admin'] },
   { icon: 'mdi-factory', title: 'Produção', value: 'production-kanban', to: { name: 'ProductionKanban' }, roles: ['producao', 'admin'] },
-  { icon: 'mdi-checkbox-marked-circle-outline', title: 'Tarefas', value: 'tasks', to: { name: 'Tasks' }, roles: ['vendedor', 'designer', 'producao', 'admin'] },
 ];
 
 const navItems = computed(() => {
