@@ -134,17 +134,16 @@ const fetchOrderDetails = async () => {
   try {
     const { data, error: fetchError } = await supabase.from('orders').select('*').eq('id', orderId).single();
     if (fetchError || !data) throw new Error('Pedido não encontrado ou você não tem permissão para vê-lo.');
-    
+
     if(data.status !== 'customer_approval') {
-        // Redireciona se o pedido não estiver mais neste status
         router.push({ path: '/' });
         return;
     }
     order.value = data;
-  } catch (e: any) { 
-    error.value = e.message; 
-  } finally { 
-    loading.value = false; 
+  } catch (e: any) {
+    error.value = e.message;
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -175,7 +174,7 @@ const approveOrder = async () => {
             redirect_url: '/pedidos'
         });
         
-        // CORREÇÃO FINAL: Usando path para evitar erros de tipo do router
+        // CORREÇÃO APLICADA AQUI
         router.push({ path: '/pedidos' });
 
     } catch(e: any) {
@@ -186,8 +185,8 @@ const approveOrder = async () => {
 };
 
 const handleChangesSubmitted = () => {
-    showRequestChangesModal.value = false; 
-    // CORREÇÃO FINAL: Usando path para evitar erros de tipo do router
+    showRequestChangesModal.value = false;
+    // CORREÇÃO APLICADA AQUI
     router.push({ path: '/' });
 };
 
