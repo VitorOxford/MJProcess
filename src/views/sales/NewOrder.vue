@@ -75,7 +75,7 @@
 
               <div v-if="selectedStockItem" class="mt-n2 mb-4 px-2">
                     <div class="d-flex justify-space-between text-caption text-grey">
-                        <span v-if="order.quantity_meters > selectedStockItem.available_meters" class="text-error">
+                        <span v-if="(order.quantity_meters || 0) > selectedStockItem.available_meters" class="text-error">
                             Atenção: Estoque ficará negativo!
                         </span>
                         <span v-else>Uso do estoque disponível:</span>
