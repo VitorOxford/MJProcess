@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div v-if="loading" class="text-center py-16">
+    <div v-if="loading" class="text-center py-16"> 
       <v-progress-circular indeterminate color="primary" size="64"></v-progress-circular>
       <p class="mt-4">Carregando dados do pedido...</p>
     </div>
