@@ -101,14 +101,13 @@ const form = reactive({
   priority: 'Média',
   status: 'Pendente',
   is_completed: false,
-  column_id: null as string | null,
+  column_id: null as string | null, // Propriedade que faltava
 });
 
 const isEditing = computed(() => !!form.id);
 
 watch(() => props.show, (newVal) => {
   if (newVal) {
-    // Se tem ID, é edição. Senão, é tarefa nova.
     if (props.taskData && props.taskData.id) {
       Object.assign(form, props.taskData);
     } else {
@@ -120,19 +119,18 @@ watch(() => props.show, (newVal) => {
 });
 
 const resetForm = () => {
-    Object.assign(form, {
-        id: null, title: '', description: '', user_id: null, due_date: null,
-        priority: 'Média', status: 'Pendente', is_completed: false, column_id: null
-    });
-}
+  Object.assign(form, {
+    id: null, title: '', description: '', user_id: null, due_date: null,
+    priority: 'Média', status: 'Pendente', is_completed: false, column_id: null
+  });
+};
 
 const saveTask = async () => {
-  if (!form.title || !form.column_id) return; // Precisa de um título e uma coluna
-  if (!userStore.profile) return; // Precisa do usuário logado
+  if (!form.title || !form.column_id || !userStore.profile) return;
   isSaving.value = true;
 
   try {
-    const taskPayload = {
+    const taskPayload: any = {
       title: form.title,
       description: form.description,
       user_id: form.user_id,
