@@ -176,8 +176,13 @@ const handleProjectSave = (project: Project) => {
 };
 
 const openTaskModal = (task: Task | null = null, columnId: string | null = null) => {
-  // Remove 'id: null'. O ID só existe em tarefas que já estão no banco.
-  selectedTask.value = task ? { ...task } : { title: '', column_id: columnId };
+  // Apenas atribua a tarefa ou um objeto simples para criação.
+  // O modal já trata a lógica de edição vs. criação.
+  if (task) {
+    selectedTask.value = { ...task };
+  } else {
+    selectedTask.value = { column_id: columnId };
+  }
   showTaskModal.value = true;
 };
   
