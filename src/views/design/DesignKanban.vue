@@ -98,13 +98,15 @@ const selectedOrder = ref<Order | null>(null);
 const uploadModalTitle = ref('');
 const pendingMove = ref<{ order: Order; newStatus: DesignStatus } | null>(null);
 
+type DesignStatus = 'design_pending' | 'in_design' | 'changes_requested' | 'finalizing' | 'customer_approval';
+
 const columns = ref<Array<{ id: number; title: string; icon: string; color: string; statuses: DesignStatus[]; requiresUpload?: boolean }>>([
   { id: 1, title: 'Fila de Espera', icon: 'mdi-clock-outline', color: 'blue-grey', statuses: ['design_pending'] },
   { id: 2, title: 'Em Desenvolvimento', icon: 'mdi-pencil-ruler', color: 'blue', statuses: ['in_design'] },
   { id: 3, title: 'Alteração Solicitada', icon: 'mdi-alert-circle-outline', color: 'red', statuses: ['changes_requested'] },
   { id: 4, title: 'Finalização', icon: 'mdi-star-outline', color: 'purple', statuses: ['finalizing'], requiresUpload: true },
   { id: 5, title: 'Aprovação Pendente', icon: 'mdi-send-check-outline', color: 'orange', statuses: ['customer_approval'], requiresUpload: true },
-]); 
+]);
 
 const statusDisplayMap: Record<DesignStatus, string> = {
     design_pending: 'Aguardando Design', in_design: 'Em Design', changes_requested: 'Em Alteração',
