@@ -34,7 +34,7 @@
               <v-card-text>
                 <div class="d-flex justify-space-between align-center mb-2">
                    <p class="font-weight-bold text-body-1">{{ order.customer_name }}</p>
-                   <v-chip size="x-small" :color="getStatusColor(order.status)" variant="flat">{{ statusDisplayMap[order.status] }}</v-chip>
+                  <v-chip size="x-small" :color="getStatusColor(order.status)" variant="flat">{{ statusDisplayMap[order.status as ProductionStatus] }}</v-chip>
                 </div>
                 <p class="text-body-2">
                   <strong>Tecido:</strong> {{ order.details.fabric_type }}
