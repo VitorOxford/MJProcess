@@ -95,7 +95,7 @@ const statusColorMap: Record<string, string> = {
 };
 
 const myOrders = computed((): Order[] => {
-    // Adicione esta verificação!
+    // CORREÇÃO APLICADA AQUI
     if (!userStore.profile) return [];
     return dashboardStore.orders.filter(o => o.created_by === userStore.profile.id);
 });
