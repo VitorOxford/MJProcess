@@ -176,7 +176,12 @@ const handleProjectSave = (project: Project) => {
 };
 
 const openTaskModal = (task: Task | null = null, columnId: string | null = null) => {
-  selectedTask.value = task ? { ...task } : { column_id: columnId };
+  if (task) {
+    selectedTask.value = { ...task, column_id: columnId || task.column_id };
+  } else {
+    // Passa um objeto com as propriedades mínimas, e não um objeto quebrado
+    selectedTask.value = { id: null, title: '', column_id: columnId };
+  }
   showTaskModal.value = true;
 };
 const handleTaskSave = async () => {
