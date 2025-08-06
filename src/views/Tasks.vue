@@ -176,8 +176,7 @@ const handleProjectSave = (project: Project) => {
 };
 
 const openTaskModal = (task: Task | null = null, columnId: string | null = null) => {
-  // Se a tarefa existe, passa ela. Senão, cria um objeto VAZIO com o column_id.
-  selectedTask.value = task ? { ...task } : { column_id: columnId };
+  selectedTask.value = task ? { ...task } : { id: null, title: '', column_id: columnId };
   showTaskModal.value = true;
 };
   
