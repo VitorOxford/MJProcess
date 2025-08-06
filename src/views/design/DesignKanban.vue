@@ -104,7 +104,7 @@ const columns = ref<Array<{ id: number; title: string; icon: string; color: stri
   { id: 3, title: 'Alteração Solicitada', icon: 'mdi-alert-circle-outline', color: 'red', statuses: ['changes_requested'] },
   { id: 4, title: 'Finalização', icon: 'mdi-star-outline', color: 'purple', statuses: ['finalizing'], requiresUpload: true },
   { id: 5, title: 'Aprovação Pendente', icon: 'mdi-send-check-outline', color: 'orange', statuses: ['customer_approval'], requiresUpload: true },
-]);
+]); 
 
 const statusDisplayMap: Record<DesignStatus, string> = {
     design_pending: 'Aguardando Design', in_design: 'Em Design', changes_requested: 'Em Alteração',
