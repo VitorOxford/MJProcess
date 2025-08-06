@@ -101,7 +101,7 @@ const form = reactive({
   priority: 'Média',
   status: 'Pendente',
   is_completed: false,
-  column_id: null as string | null, // Propriedade que faltava
+  column_id: null as string | null,
 });
 
 const isEditing = computed(() => !!form.id);
@@ -130,7 +130,7 @@ const saveTask = async () => {
   isSaving.value = true;
 
   try {
-    const taskPayload: any = {
+    const taskPayload = {
       title: form.title,
       description: form.description,
       user_id: form.user_id,
